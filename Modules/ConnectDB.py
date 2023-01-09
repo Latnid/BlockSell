@@ -6,7 +6,7 @@ import datetime
 
 # Load and assign variables.
 load_dotenv()
-SQL_DB = os.getenv('SQL_DB')
+SQL_DB = os.getenv('SQL_DB_BLOCKSELL')
 SQL_USER = os.getenv("SQL_USER")
 SQL_PASSWORD = os.getenv("SQL_PASSWORD")
 SQL_HOST = os.getenv("SQL_HOST")

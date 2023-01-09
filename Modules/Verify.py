@@ -9,12 +9,12 @@ import time
 import requests
 
 # define function create_message.
-@st.cache(allow_output_mutation=True,ttl=30)
+@st.cache(allow_output_mutation=True,ttl=60)
 def create_message():
     seed1 = str(random.random())
     seed2 = secrets.token_hex()
     seed3 = hashlib.sha256((seed1+seed2).encode()).hexdigest()
-    expired_time = datetime.datetime.fromtimestamp(time.time() + 30).strftime("%Y-%m-%d %H:%M:%S")
+    expired_time = datetime.datetime.fromtimestamp(time.time() + 60).strftime("%Y-%m-%d %H:%M:%S")
     return seed3,expired_time
 
 # define function to create signature
