@@ -1,4 +1,3 @@
-from Modules.Verify import create_message,signature_to_account
 import streamlit as st
 
 
@@ -6,8 +5,7 @@ def Content_page1(w3,NFT_contract):
 
     if st.button("Verify your idendity"):
         st.write("User Information")
-        st.write("Your access: " + str(access))
-        st.write("Activating account: " + w3.eth.default_account)
+        st.write("Activating account: " + w3.eth.coinbase)
         st.write("Block number: " + str(w3.eth.get_block_number()))
         st.write("Chain ID: " + str(w3.eth.chain_id))
         st.write("Balance: " + str(w3.eth.get_balance(w3.eth.default_account))+" Wei")        
@@ -53,5 +51,5 @@ def Content_page1(w3,NFT_contract):
     #Sign message
     if st.button("Sign Message"):
 
-        signature = NFT_contract.functions.sign(message).transact(txn_params)
+        signature = NFT_contract.functions.sign(message).transact(txn_params).hex()
         st.write(signature)

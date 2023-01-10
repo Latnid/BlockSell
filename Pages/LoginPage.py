@@ -8,40 +8,20 @@ from Modules.Login import Login
 from Modules.Verify import get_user_hash
 from Modules.DBer import login_status,logout
 import os
+from Modules.Basic import basic_load
 
-#Read user hash info
-user_hash=get_user_hash()
-md_user_hash = f"User hash:\n{user_hash}"
-st.sidebar.markdown(md_user_hash)
-
-# Connect DataBase
-con,cur = connect_data_base()
-
-#load env file
-load_dotenv()
-
-#create web3 instance and load contract
-RPC = os.getenv("WEB3_PROVIDER_URI2")
-CPC = os.getenv("SMART_CONTRACT_ADDRESS2")
-
-#Connect to Web3 and contract
-w3, NFT_contract = w3_contract(RPC,CPC)
-
-#Check login_status
-#login_status = False
-login_status = login_status(cur,user_hash)
-if login_status == False:
-    st.sidebar.markdown("You haven't login")
-if login_status == True:
-    st.sidebar.markdown("Valid user")
+#Load all basic environment
+w3,NFT_contract,con,cur,user_hash,user_login_status = basic_load()
 
 #Load base on login status:
-if login_status == True:
+if user_login_status == True:
     st.markdown("You already login")
     if st.button("Logout",key="logout_bt"):
         logout(con,cur,user_hash)
-        st.write("Logout completed")
+        st.write("Logout completed")                        
+        # Enable automatic refresh
+        st.experimental_rerun()
 else:
-    Login(con,cur,user_hash)
+    Login(w3,con,cur,user_hash)
 
 

@@ -1,21 +1,10 @@
-import os
-from Modules.Web3Connect import w3_contract
-from Modules.Verify import create_message,signature_to_account,get_user_hash
-from Modules.DBer import login_success,login_status
-from dotenv import load_dotenv
+from Modules.Verify import create_message,signature_to_account
+from Modules.DBer import login_success
 import streamlit as st
 from Modules.ConnectDB import *
 
 
-def Login(con,cur,user_hash):
-    #load env file
-    load_dotenv()
-
-    #create web3 instance and load contract
-    RPC = os.getenv("WEB3_PROVIDER_URI2")
-    CPC = os.getenv("SMART_CONTRACT_ADDRESS2")
-
-    w3, NFT_contract = w3_contract(RPC,CPC)
+def Login(w3,con,cur,user_hash):
 
     #load all the accounts from database
     database_address_list = w3.eth.accounts
@@ -40,12 +29,13 @@ def Login(con,cur,user_hash):
             else:
                 for database_address in database_address_list:
                     if recover_address == database_address:
-                        st.write("Welcome abort")
+                        st.write("Welcome aboard")
                         #Set User default address
                         w3.eth.default_account = recover_address
                         #Input verify hash to Database
                         #user_hash = get_user_hash()
                         login_success(con,cur,user_hash)
-    
+                        # Enable automatic refresh
+                        st.experimental_rerun()
                     else:
                         pass

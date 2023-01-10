@@ -37,14 +37,14 @@ def login_status(cur,user_hash):
         expired_time = row[1]
         ny_timezone = pytz.timezone("America/New_York")
         if expired_time > datetime.now(ny_timezone): #Login still valid
-            login_status = True
-            return login_status
+            user_login_status = True
+            return user_login_status
         else:
-            login_status = False # Login status is expired
-            return login_status
+            user_login_status = False # Login status is expired
+            return user_login_status
     else:
-        login_status = False
-        return login_status
+        user_login_status = False
+        return user_login_status
 
             
 def logout(con,cur,user_hash):
