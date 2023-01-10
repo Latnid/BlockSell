@@ -1,6 +1,7 @@
 from .ConnectDB import *
 from datetime import datetime,timedelta
 import pytz
+
  
  ######Intert temporary verify info into Database########
 def login_success(con,cur,user_hash):
@@ -8,6 +9,8 @@ def login_success(con,cur,user_hash):
     # Convert to NewYork Time
     ny_timezone = pytz.timezone("America/New_York")
     ny_time = datetime.now(ny_timezone)
+    expired_time = ny_time+timedelta(minutes=10)
+
     #Newyork_time = str(ny_time).split(' ')[0] #Only keep the date
     # prepare table_name
     verifier_table_name = "login_status"
@@ -18,7 +21,7 @@ def login_success(con,cur,user_hash):
     con.commit()
     # Insert all data to database and excute.  
     cur.execute("INSERT INTO {} (create_time,user_hash, expired_time) VALUES (%s,%s, %s)".format(verifier_table_name),
-    (ny_time, user_hash, ny_time+timedelta(minutes=10)))
+    (ny_time, user_hash, expired_time))
     # excute query
     con.commit()
 
@@ -44,3 +47,10 @@ def login_status(cur,user_hash):
         return login_status
 
             
+def logout(con,cur,user_hash):
+    #Select the User_hash matched record
+    cur.execute(
+        "DELETE FROM login_status WHERE user_hash = %s",(user_hash,)
+    )
+    # excute query
+    con.commit()

@@ -28,7 +28,7 @@ def signature_to_account(w3,message,signature):
     return recovered_address
 
 #define function to get user fingerprint info
-def user_hash():
+def get_user_hash():
     ip_address = requests.get("https://api.ipify.org").text
     user_agent = requests.get("https://httpbin.org/user-agent").json()["user-agent"]
     user_hash = hashlib.sha256((ip_address+user_agent).encode()).hexdigest()

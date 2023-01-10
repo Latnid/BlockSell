@@ -1,14 +1,13 @@
 import os
 from Modules.Web3Connect import w3_contract
-from Modules.Verify import create_message,signature_to_account,user_hash
+from Modules.Verify import create_message,signature_to_account,get_user_hash
 from Modules.DBer import login_success,login_status
-from pathlib import Path
 from dotenv import load_dotenv
 import streamlit as st
 from Modules.ConnectDB import *
 
 
-def Login(con,cur):
+def Login(con,cur,user_hash):
     #load env file
     load_dotenv()
 
@@ -45,8 +44,8 @@ def Login(con,cur):
                         #Set User default address
                         w3.eth.default_account = recover_address
                         #Input verify hash to Database
-                        #user_hash = user_hash()
+                        #user_hash = get_user_hash()
                         login_success(con,cur,user_hash)
     
                     else:
-                        st.write("You don't own this account")
+                        pass
