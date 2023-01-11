@@ -9,7 +9,7 @@ def login_success(con,cur,user_hash):
     # Convert to NewYork Time
     ny_timezone = pytz.timezone("America/New_York")
     ny_time = datetime.now(ny_timezone)
-    expired_time = ny_time+timedelta(minutes=10)
+    expired_time = ny_time+timedelta(minutes=90)
 
     #Newyork_time = str(ny_time).split(' ')[0] #Only keep the date
     # prepare table_name

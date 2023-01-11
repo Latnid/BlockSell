@@ -1,21 +1,21 @@
 import streamlit as st
 
 
-def Content_page1(w3,NFT_contract):
+def Content_page1(w3,NFT_contract,CPC):
 
     if st.button("Verify your idendity"):
         st.write("User Information")
-        st.write("Activating account: " + w3.eth.coinbase)
+        st.write("Activating account: " + w3.eth.default_account)
         st.write("Block number: " + str(w3.eth.get_block_number()))
         st.write("Chain ID: " + str(w3.eth.chain_id))
         st.write("Balance: " + str(w3.eth.get_balance(w3.eth.default_account))+" Wei")        
         st.write("Node Mining: " + str(w3.eth.mining))
     
     # Send transaction
-    from_address = st.text_input("From account", key= "TX_from",value= w3.eth.coinbase)
+    from_address = st.text_input("From account", key= "TX_from",value= w3.eth.default_account)
 
     #To address
-    to_address = st.text_input("To account", key= "TX_To",value=w3.eth.coinbase)
+    to_address = st.text_input("To account", key= "TX_To",value=w3.eth.default_account)
 
     #Get the current balances for both account
     st.write("From account balance: " + str(w3.eth.get_balance(from_address)))
@@ -53,3 +53,46 @@ def Content_page1(w3,NFT_contract):
 
         signature = NFT_contract.functions.sign(message).transact(txn_params).hex()
         st.write(signature)
+
+    st.title("Create Artwork")
+    #Create Arework
+    owner_of_NFT = st.text_input("The first owner of this NFT you want to assigned")
+    art_name = st.text_input("Name of Artwork")
+    artist_name = st.text_input("The artist name")
+    appraisal = int(st.number_input("Artwork price(Wei)"))
+    artwork_URI = st.text_input("Artwork URI")
+
+    if st.button("Create Artwork"):
+        if w3.eth.default_account != w3.eth.coinbase:
+            st.write("Only the contract owner can Create Artwork!")
+        else:
+            token_ID = NFT_contract.functions.CreatArtwork(owner_of_NFT,art_name,artist_name,appraisal,artwork_URI).transact({
+            'from': w3.eth.default_account, # Ethereum address of the sender
+            'to':CPC,
+            'gas': 1000000, # Gas limit
+            'gasPrice': w3.toWei('20', 'gwei'), # Gas price in wei
+            'value': 0, # value must be 0 as the function is not payable
+            
+            })
+            receipt = w3.eth.waitForTransactionReceipt(token_ID)
+            st.write("Receipt is ready. Here it is:")
+            st.write(dict(receipt))
+
+    #Buy Artwork
+    st.title("Buy Artwork")
+    artwork_tokenID = int(st.number_input("Artwork tokenID",))
+    buyer_address = st.text_input("buyer account")
+    buyer_offer = int(st.number_input("Price offer"))
+    if st.button("Buy Artwork"):
+        
+        txn_receipt_buy = NFT_contract.functions.buy(artwork_tokenID).transact({
+        'from': buyer_address, # Ethereum address of the sender
+        'to':CPC,
+        'gas': 1000000, # Gas limit
+        'gasPrice': w3.toWei('20', 'gwei'), # Gas price in wei
+        'value': buyer_offer, # value must be 0 as the function is not payable
+        
+    })
+        receipt = w3.eth.waitForTransactionReceipt(txn_receipt_buy)
+        st.write("Receipt is ready. Here it is:")
+        st.write(dict(receipt))

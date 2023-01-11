@@ -1,7 +1,6 @@
 from Modules.Web3Connect import w3_contract
 from Modules.ConnectDB import *
 from dotenv import load_dotenv
-from Modules.Login import Login
 from Modules.Verify import get_user_hash
 from Modules.DBer import login_status
 import os
@@ -30,6 +29,7 @@ def basic_load():
         st.sidebar.markdown("You haven't login")
     if user_login_status == True:
         st.sidebar.markdown("Valid user")
+    
 
     #create web3 instance and load contract
     RPC = os.getenv("WEB3_PROVIDER_URI2")
@@ -38,7 +38,7 @@ def basic_load():
     #Connect to Web3 and contract
     w3, NFT_contract = w3_contract(RPC,CPC)
 
-
+    st.sidebar.markdown(w3.eth.default_account)
 
     #return all required variables
-    return w3,NFT_contract,con,cur,user_hash,user_login_status
+    return w3,NFT_contract,con,cur,user_hash,user_login_status,RPC,CPC
