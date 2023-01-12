@@ -17,17 +17,17 @@ def SVIP_page1(w3,NFT_contract,CPC):
         artwork_URI = st.text_input("Artwork URI")
 
         if st.button("Create Artwork"):
-            if w3.eth.default_account != w3.eth.coinbase:
-                st.write("Only the contract owner can Create Artwork!")
-            else:
-                token_ID = NFT_contract.functions.CreatArtwork(owner_of_NFT,art_name,artist_name,appraisal,artwork_URI).transact({
-                'from': w3.eth.default_account, # Ethereum address of the sender
-                'to':CPC,
-                'gas': 1000000, # Gas limit
-                'gasPrice': w3.toWei('20', 'gwei'), # Gas price in wei
-                'value': 0, # value must be 0 as the function is not payable
-                
-                })
-                receipt = w3.eth.waitForTransactionReceipt(token_ID)
-                st.write("Receipt is ready. Here it is:")
-                st.write(dict(receipt))
+            # if w3.eth.default_account != w3.eth.coinbase:
+            #     st.write("Only the contract owner can Create Artwork!")
+            # else:
+            token_ID = NFT_contract.functions.CreatArtwork(owner_of_NFT,art_name,artist_name,appraisal,artwork_URI).transact({
+            'from': w3.eth.coinbase, # Ethereum address of the sender
+            'to':CPC,
+            'gas': 1000000, # Gas limit
+            'gasPrice': w3.toWei('20', 'gwei'), # Gas price in wei
+            'value': 0, # value must be 0 as the function is not payable
+            
+            })
+            receipt = w3.eth.waitForTransactionReceipt(token_ID)
+            st.write("Receipt is ready. Here it is:")
+            st.write(dict(receipt))

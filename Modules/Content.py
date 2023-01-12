@@ -1,4 +1,5 @@
 import streamlit as st
+from Modules.SVIPfeatures import SVIP_page1
 
 
 def Content_page1(w3,NFT_contract,CPC):
@@ -91,9 +92,17 @@ def Content_page1(w3,NFT_contract,CPC):
             receipt = w3.eth.waitForTransactionReceipt(txn_receipt_buy)
             st.write("Receipt is ready. Here it is:")
             st.write(dict(receipt))
+            #Enable automatic refresh
+            st.experimental_rerun()
         except ValueError as e:
             
             st.write("An error occurre,check price,or you may already have the NFT onhand")
+
+    #Verify SVIP access
+    SVIP_NFT_owner = NFT_contract.functions.isNFTOwnerVIP(7).call({
+        'from': w3.eth.default_account,
+        'to':CPC,
+        })
+    if SVIP_NFT_owner == True:
+        SVIP_page1(w3,NFT_contract,CPC)
         
-        # Enable automatic refresh
-        #st.experimental_rerun()

@@ -18,7 +18,8 @@ def basic_load():
     st.set_page_config(
     page_title="Welcome to BlockSell",
     page_icon="👋",
-)
+)   
+
     #Read user hash info
     user_hash=get_user_hash()
     user_hash_first4 = user_hash[:4]
@@ -57,7 +58,7 @@ def basic_load():
         if SVIP_NFT_owner == True:
             st.sidebar.subheader("You have SVIP access")
             if st.sidebar.button("Open SVIP feature"):
-                SVIP_page1(w3,NFT_contract,CPC)
+               SVIP_page1(w3,NFT_contract,CPC)
     
 
     #return all required variables
