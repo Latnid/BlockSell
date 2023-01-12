@@ -88,6 +88,19 @@ contract MyToken is ERC721URIStorage, ERC721Enumerable{
         newAppraisal(tokenId,msg.value,"FreeTrade");
     }
 
+// event for Signing message
+event Sign(address signer, string message, bytes32 signature);
+
+//function Sign message
+    function sign(string memory message) public {
+        //acquire request address
+        address signer = msg.sender;
+        //use encodePacked to sign
+        bytes32 signature = keccak256(abi.encodePacked(signer,message));
+        //emit the Sign event
+        emit Sign(signer,message,signature);
+    }
+
 //functions need to be override.
     function _beforeTokenTransfer(
         address from,
